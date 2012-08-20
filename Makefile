@@ -1,4 +1,4 @@
-######################################################################################################################
+#############################################################################################################
 
 ######################################
 ###    TABLEAU DE BORD DE JVS5
@@ -7,7 +7,8 @@
 ######## les News de vthierry à philou : ########
 
 # La vie est belle en java7 : 
-## mon problème "firefox" est soldé si je "force" l'usage du plugin java-oracle-7 . . donc à spécifier dans la doc
+## mon problème "firefox" est soldé si je "force" l'usage du plugin java-oracle-7 . . 
+## donc à spécifier dans la doc
 ## les javascool-framework/lib/javac.jar javascool-proglet-builder/lib/javadoc.jar 
 ### . . sont désormais construites à partir de java7 et ca devient clean
 ## ProgletBuilder est adapté pour gérer le format de javadoc7
@@ -19,8 +20,6 @@
 ### qui nous libère des liens avec les éléments du gui de jvs4
 
 # ProgletBuilder me semble prêt aussi, modulo les notes de ce makefile
-
-# Une variable $P12_PASS a été ajoutée au mécanisme de . . et non, Philippe, on ne prononce pas le 'd' à la fin de «connard». 
 
 # http://javascool.github.com/javascool-framework/doc/org/javascool/core/JarManager.html 
 ## a désormais une méthode downloadFile() pour gérer les téléchargements
@@ -90,8 +89,8 @@ prun = java -cp ./javascool-proglet-builder/javascool-proglet-builder.jar Progle
 
 tst1 : 
 	$(MAKE) -C javascool-proglet-builder jar
-	export PATH="/usr/java/default/bin:$$PATH"  ; d="`pwd`/proglet-codagePixels" ; ${prun} compile $$d ; cd $$d/applet ; java -cp .:./javascool.jar org.javascool.core.ProgletApplet org.javascool.proglets.codagePixels.Panel
-#	export PATH="/usr/java/default/bin:$$PATH"  ; d="`pwd`/proglet-codagePixels" ; ${prun} compile $$d ; firefox $$d/applet/index.html
+#	export PATH="/usr/java/default/bin:$$PATH"  ; d="`pwd`/proglet-codagePixels" ; ${prun} compile $$d ; cd $$d/applet ; java -cp .:./javascool.jar org.javascool.core.ProgletApplet org.javascool.proglets.codagePixels.Panel
+	export PATH="/usr/java/default/bin:$$PATH"  ; d="`pwd`/proglet-codagePixels" ; ${prun} compile $$d ; firefox $$d/applet/index.html
 #	export PATH="/usr/java/default/bin:$$PATH"  ; d="/tmp/proglet-sample" ; rm -rf $$d ; ${prun} create $$d ; ${prun} compile $$d ; firefox $$d/applet/index.html
 #	export PATH="/usr/java/default/bin:$$PATH"  ; ${prun}
 #	export PATH="/usr/java/default/bin:$$PATH"  ; ./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS compile
