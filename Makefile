@@ -4,54 +4,25 @@
 ###    TABLEAU DE BORD DE JVS5
 ######################################
 
-######## les News de vthierry à philou : ########
-
-# La vie est belle en java7 : 
-## mon problème "firefox" est soldé si je "force" l'usage du plugin java-oracle-7 . . 
-## donc à spécifier dans la doc
-## les javascool-framework/lib/javac.jar javascool-proglet-builder/lib/javadoc.jar 
-### . . sont désormais construites à partir de java7 et ca devient clean
-## ProgletBuilder est adapté pour gérer le format de javadoc7
-## La javadoc est désormais générée avec ce que nous avons fait au niveau du ProgletBuilder
-### Mais le style, du coup, est à revoir ensemble . . 
-
-# ProgletApplet est prêt :
-## J'ai créé les macros de wrapping sur les panel dans javascool-framework/src/org/javascool/macros/Pane.java 
-### qui nous libère des liens avec les éléments du gui de jvs4
-
-# ProgletBuilder me semble prêt aussi, modulo les notes de ce makefile
-
-# http://javascool.github.com/javascool-framework/doc/org/javascool/core/JarManager.html 
-## a désormais une méthode downloadFile() pour gérer les téléchargements
-
 ######## nouveaux Questionnnements de vthierry à philou : ########
 
 # A mon avis javascool-framework/out est à virer ; javascool-framework/index.html qui semble etre un doc du Polyfile a deplacer . . 
 
 # Les lignes import javax.swing.*;import java.awt.*; ont été ajoutées à toutes les classes . . 
-## A disgnistiquer puis je virerai avec sedgrep
 
 # Lors de tes copies des classes org.javascool.macros.*; tu as viré des portions et commentées d'autres : 
 ## à voir ensemble avce des @todo là où il y a des pbs.
 
-# Est-ce que javascool-framework/lib/jarsigner.jar sert à qq chose ?
-
 # Comment encapsuler http://javascool.github.com/javascool-framework/doc/overview-summary.html 
-## dans bootstatrp maintenant qu'on a les éléments en place
-## Par exemple comme http://javascool.github.com/javascool-5/doc
+## La javadoc est désormais générée avec ce que nous avons fait au niveau du ProgletBuilder
+### Mais le style, du coup, est à revoir ensemble . . 
 
 # Ca marche sous windows ton interface ?
 
 # Bon on se fait http://javascool.github.com/doc/framework/index.html ?
-
 # Comment compléter http://javascool.github.com/doc/developper/index.html finalement ?
 
 ######## anciens Questionnnements de vthierry à philou : ########
-
-# Comment générer le panneau de choix des proglets dont la liste est dans wproglets/*/ 
-##à partir du listDirectory de PolyFileWriter.
-
-## A bien piger : où se trouve les pages des proglets sur le WEB du coup.
 
 # Quid de la proposition de répertoires locaux ./{win32,i686,amd64,macos} dans les proglets ?
 ## NB : Les librairies ne sont pas les mêmes sous mac et linux, donc à ajouter
@@ -60,7 +31,7 @@
 # A propos du mécanisme de complétion, 
 ## à implémenter http://javascool.github.com/doc/developper/completion-json.html est ok ?
 
-# On pourrait avoir une applet signée dans une WebPage pour le javascool-builder
+# On pourrait avoir une applet signée dans la doc javascool pour le javascool-builder
 
 ######## Travail à faire pour vthierry : ########
 
@@ -94,6 +65,7 @@ tst1 :
 #	export PATH="/usr/java/default/bin:$$PATH"  ; d="/tmp/proglet-sample" ; rm -rf $$d ; ${prun} create $$d ; ${prun} compile $$d ; firefox $$d/applet/index.html
 #	export PATH="/usr/java/default/bin:$$PATH"  ; ${prun}
 #	export PATH="/usr/java/default/bin:$$PATH"  ; ./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS compile
+	cd proglet-codagePixels ; git commit -a -m 'test' ; git push -q ; rm applet/javascool.jar
 
 # test de la javadoc
 
