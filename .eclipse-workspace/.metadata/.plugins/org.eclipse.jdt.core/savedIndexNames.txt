@@ -1,0 +1,16 @@
+INDEX VERSION 1.126+/home/pvienne/javascool/.eclipse-workspace/.metadata/.plugins/org.eclipse.jdt.core
+2053058390.index
+2069963898.index
+1506173761.index
+3357355120.index
+4075946441.index
+272844130.index
+759411962.index
+3119082648.index
+3709811401.index
+519334133.index
+2571469016.index
+1743836193.index
+3167340433.index
+4210551779.index
+2454626115.index

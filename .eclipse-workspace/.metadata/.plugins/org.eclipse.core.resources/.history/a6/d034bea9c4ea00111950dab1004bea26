@@ -1,0 +1,342 @@
+/*
+ * $file.name
+ *     Copyright (C) 2012  Philippe VIENNE
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.javascool.core;
+
+import org.javascool.tools.FileManager;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import javax.swing.JFileChooser;
+import java.io.File;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+/**
+ * JS-Java Gate for PolyFileWriter.
+ *
+ * @author Philippe VIENNE
+ */
+public class PolyFileWriter extends JavaGate {
+  private static final long serialVersionUID = 1L;
+
+
+    /**
+     * Read a file on a location.
+     * Replace the FileReader API for text files (code e.g.)
+     *
+     * @param location Where have I got to read your file ?
+     * @return The file content
+     * @see FileManager#load(String)
+     */
+    public String load(final String location) throws Exception {
+        assertSafeUsage();
+        try {
+            return AccessController.doPrivileged(
+                    new PrivilegedAction<String>() {
+                        public String run() {
+                            return FileManager.load(location);
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            popException(e);
+            throw e;
+        }
+    }
+
+    /**
+     * Write a File on a location.
+     * Replace the FileWriter API for text files only (code, plain text e.g.)
+     *
+     * @param location Where have I got to write your file ?
+     * @param what     The content to write into the file
+     * @return true if all is ok and the file is safe false otherwise
+     * @see FileManager#save(String, String)
+     */
+    public boolean save(final String location, final String what) throws Exception {
+        assertSafeUsage();
+        try {
+            return AccessController.doPrivileged(
+                    new PrivilegedAction<Boolean>(){
+                        public Boolean run() {
+                            try {
+                                FileManager.save(location, what);
+                                return true;
+                            } catch (Exception e) {
+                                return false;
+                            }
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            popException(e);
+            throw e;
+        }
+    }
+
+    /**
+     * Return the user's home directory.
+     * Use the System.getProperty("user.home")
+     *
+     * @return The path to the directory
+     */
+    public String getHomeDirectory() throws Exception {
+        assertSafeUsage();
+        try {
+            return AccessController.doPrivileged(
+                    new PrivilegedAction<String>() {
+                        public String run() {
+                            return System.getProperty("user.home");
+                        }
+                    }
+            );
+
+        } catch (Exception e) {
+            popException(e);
+            throw e;
+        }
+    }
+
+    /**
+     * Create a new directory
+     *
+     * @param location The path of new folder
+     * @return true On success false If the folder already exists
+     */
+    public boolean createDirectory(final String location) throws Exception {
+        assertSafeUsage();
+        try {
+            return AccessController.doPrivileged(
+                    new PrivilegedAction<Boolean>() {
+                        public Boolean run() {
+                            try {
+                                if (location != null) {
+                                    if (new File(location).exists()) {
+                                        throw new IllegalArgumentException("Directory " + location + " already exists");
+                                    }
+                                    new File(location).mkdirs();
+                                } else {
+                                    throw new IllegalArgumentException("location is null");
+                                }
+                            } catch (Exception e) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    }
+            );
+
+        } catch (Exception e) {
+            popException(e);
+            throw e;
+        }
+    }
+
+    /**
+     * Remove a file or directory
+     *
+     * @param location The path to file or directory
+     * @return true On success false If the file or folder don't exist
+     */
+    public boolean remove(final String location) throws Exception {
+        assertSafeUsage();
+        try {
+            return AccessController.doPrivileged(
+                    new PrivilegedAction<Boolean>() {
+                        public Boolean run() {
+                            try {
+                                if (location != null) {
+                                    if (!new File(location).exists()) {
+                                        throw new IllegalArgumentException("" + location + " does not exist");
+                                    }
+                                    new File(location).delete();
+                                } else {
+                                    throw new IllegalArgumentException("location is null");
+                                }
+                            } catch (Exception e) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    }
+            );
+
+        } catch (Exception e) {
+            popException(e);
+            throw e;
+        }
+    }
+
+    /**
+     * Move a file or directory
+     *
+     * @param location The path to file or directory
+     * @param to       The new path
+     * @return true On success false If the file or folder don't exist
+     */
+    public boolean move(final String location, final String to) throws Exception {
+        assertSafeUsage();
+        try {
+            return AccessController.doPrivileged(
+                    new PrivilegedAction<Boolean>() {
+                        public Boolean run() {
+                            try {
+                                if (location != null) {
+                                    if (!new File(location).exists() || new File(to).exists()) {
+                                        throw new IllegalArgumentException("Can't move " + location + " because location path do not exist or something exists in the 'to' path");
+                                    }
+                                    new File(location).renameTo(new File(to));
+                                } else {
+                                    throw new IllegalArgumentException("location is null");
+                                }
+                            } catch (Exception e) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            popException(e);
+            throw e;
+        }
+    }
+
+    /**
+     * List files into a directory.
+     *
+     * @param location The directory to list
+     * @return A string with a structure as this
+     *         [
+     *         {"name":"toto.java","isFile":true,"isHidden":false,"path":"/home/user/toto.java"},
+     *         ]
+     */
+    @SuppressWarnings("unchecked") 
+    public String listDirectory(final String location) throws Exception {
+        assertSafeUsage();
+        try {
+            final File[] list = AccessController.doPrivileged(
+                    new PrivilegedAction<File[]>() {
+                        public File[] run() {
+                            return new File(location).listFiles();
+                        }
+                    }
+            );
+            final JSONArray files = new JSONArray();
+            for (int i = 0; i < list.length; i++) {
+                final int c = i;
+                files.add(AccessController.doPrivileged(
+                        new PrivilegedAction<JSONObject>() {
+                            public JSONObject run() {
+			      JSONObject obj=new JSONObject();
+			      obj.put("name",list[c].getName());
+			      obj.put("path",list[c].getAbsolutePath());
+			      obj.put("isHidden",list[c].isHidden());
+			      obj.put("isFile",list[c].isFile()) ;
+			      return obj;
+			    }
+                        }
+                ));
+            }
+            return files.toJSONString();
+        } catch (Exception e) {
+            popException(e);
+            throw e;
+        }
+    }
+
+    /**
+     * @see #askFile(boolean, String, String)
+     */
+    public void askFile() throws Exception {
+        askFile(false);
+    }
+
+    /**
+     * @see #askFile(boolean, String, String)
+     */
+    public void askFile(boolean forSave) throws Exception {
+        askFile(forSave, null);
+    }
+
+    /**
+     * @see #askFile(boolean, String, String)
+     */
+    public void askFile(boolean forSave, String ext) throws Exception {
+        askFile(forSave, ext, this.getHomeDirectory());
+    }
+
+    public void askFile(final boolean forSave, String ext, final String path) throws Exception {
+        askFile(forSave,ext,path,forSave?"javascool.file.save.selected":"javascool.file.open.selected");
+    }
+
+    /**
+     * Demande à l'utilisateur de sélectionner un fichier.
+     * La fonction est non blocante pour JavaScript. Le résultat est donné par l'évenement sur le document de type
+     * javascool.file.{save|open}.selected ou celui passé en paramètre. L'évènement a comme donné au premier index
+     * l'adresse du fichier ou null si l'utilisateur n'en a pas choisit.
+     *
+     * @see org.javascool.core.JSGate
+     * @param forSave Si vrais alors la fenêtre sera ouverte en mode de sauvegarde si faux en mode ouverture
+     * @param ext     Liste des extentions autorisés séparé par un espace. Null ou chaîne vide pour autorisé toutes les
+     *                extentions
+     * @param path    Le dossier à ouvrir dan le selecteur de fichier
+     * @param jsEvent L'évènement à invoquer sur le document lorsque l'utilisateur sélectionne son fichier
+     */
+    public void askFile(final boolean forSave, String ext, String path, String jsEvent) throws Exception {
+        assertSafeUsage();
+        try {
+            if (ext == null) ext = "";
+            if (path == null) path = this.getHomeDirectory();
+            if (jsEvent == null) jsEvent = forSave?"javascool.file.save.selected":"javascool.file.open.selected";
+            final String e=ext, p=path, j=jsEvent;
+            try {
+                final JFileChooser fc = AccessController.doPrivileged(
+                        new PrivilegedAction<JFileChooser>() {
+                            public JFileChooser run() {
+                                return new JFileChooser(getFile(p));
+                            }
+                        }
+                );
+                runInNewThreadWithAllRights(new Runnable() {
+                    @Override
+                    public void run() {
+                        int r;
+                        if (forSave)
+                            r = fc.showSaveDialog(null);
+                        else
+                            r = fc.showOpenDialog(null);
+                        if (r == JFileChooser.APPROVE_OPTION) {
+                            final File file = fc.getSelectedFile();
+                            JSGate.triggerOff(thisApplet,j,file.toString());
+                        } else
+                            JSGate.triggerOff(thisApplet,j,null);
+                    }
+                });
+            } catch (Exception ex) {
+                JSGate.triggerOff(thisApplet,jsEvent,null);
+                throw ex;
+            }
+        } catch (Exception e) {
+            popException(e);
+            throw e;
+        }
+    }
+
+}
