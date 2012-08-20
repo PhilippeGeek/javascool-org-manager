@@ -79,8 +79,18 @@ tst3 :
 	export PATH="/usr/java/default/bin:$$PATH" ; java -cp javascool-framework/javascool.jar org.javascool.core.ProgletApplet "un test" "kk-applet"
 
 ######################################################################################################################
+# Gestion des proglets 
+######################################################################################################################
+
+proglets:
+	$(MAKE) -C javascool-proglet-builder jar
+	export PATH="/usr/java/default/bin:$$PATH"  ; ./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS compile
+
+
+######################################################################################################################
 # Gestion des dépots de javascool 
 ######################################################################################################################
+
 
 git_repos = javascool-5 javascool-framework javascool-proglet-builder javascool.github.com # web-documents
 
