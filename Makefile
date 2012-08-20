@@ -65,19 +65,18 @@
 
 ######## Travail à faire pour vthierry : ########
 
-# Ajouter les styles des sections du help.html avec des titres
-
-# Retravailler la conversion des liens vers http://javascool.gforge.inria.fr ou des liens de types ../<auterproglet>
-
-######################################################################################################################
+# Docs des proglets
+## Ajouter les styles des sections du help.html avec des titres
+## Retravailler la conversion des liens vers http://javascool.gforge.inria.fr ou des liens de types ../<autreproglet>
 
 ######################################################################################################################
-# Ici sont qq commandes (à vthierry, et les autres ?) pour le développement/test
+
+######################################################################################################################
+# Ici sont qq commandes pour le développement/test
 ######################################################################################################################
 
 ifeq ($(USER),vthierry)
-GIT_COMMIT_MESSAGE ?= Mise à jour depuis le Makefile
-now : tst3
+now : tst1
 endif
 
 # test de Java'sCool 5
@@ -85,30 +84,28 @@ endif
 run :
 	cd javascool-5 ; make fweb
 
-# test du ProgletApplet
-
-tst0 : 
-	$(MAKE) -C javascool-framework jar
-	export PATH="/usr/java/default/bin:$$PATH" ; java -cp javascool-framework/javascool.jar org.javascool.core.ProgletApplet "un test" "kk-applet"
-
 # test du ProgletBuilder
 
 prun = java -cp ./javascool-proglet-builder/javascool-proglet-builder.jar ProgletBuilder
 
 tst1 : 
 	$(MAKE) -C javascool-proglet-builder jar
-	export PATH="/usr/java/default/bin:$$PATH"  ; d="`pwd`/proglet-codagePixels" ; ${prun} compile $$d ; firefox $$d/applet/index.html
+	export PATH="/usr/java/default/bin:$$PATH"  ; d="`pwd`/proglet-codagePixels" ; ${prun} compile $$d ; cd $$d/applet ; java -cp .:./javascool.jar org.javascool.core.ProgletApplet org.javascool.proglets.codagePixels.Panel
+#	export PATH="/usr/java/default/bin:$$PATH"  ; d="`pwd`/proglet-codagePixels" ; ${prun} compile $$d ; firefox $$d/applet/index.html
 #	export PATH="/usr/java/default/bin:$$PATH"  ; d="/tmp/proglet-sample" ; rm -rf $$d ; ${prun} create $$d ; ${prun} compile $$d ; firefox $$d/applet/index.html
 #	export PATH="/usr/java/default/bin:$$PATH"  ; ${prun}
-
-tst2 :
-	$(MAKE) -C javascool-proglet-builder jar
-	./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS compile
+#	export PATH="/usr/java/default/bin:$$PATH"  ; ./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS compile
 
 # test de la javadoc
 
-tst3 :
+tst2 :
 	$(MAKE) -C javascool-proglet-builder jar ; rm -rf javascool-framework/doc ; $(MAKE) -C javascool-framework doc
+
+# test du ProgletApplet
+
+tst3 : 
+	$(MAKE) -C javascool-framework jar
+	export PATH="/usr/java/default/bin:$$PATH" ; java -cp javascool-framework/javascool.jar org.javascool.core.ProgletApplet "un test" "kk-applet"
 
 ######################################################################################################################
 # Gestion des dépots de javascool 
@@ -123,7 +120,7 @@ pull :
 ppull :
 	./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS pull
 
-GIT_COMMIT_MESSAGE ?= committed from makefile
+GIT_COMMIT_MESSAGE ?= Mise à jour depuis le Makefile
 
 push :
 	echo "push makefile" ; git commit -a -m '$(GIT_COMMIT_MESSAGE)' ; git push -q 
@@ -133,7 +130,7 @@ ppush :
 	./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS push
 
 clean :
-	/bin/rm -rf {javascool-framework,javascool-proglet-builder}/doc `find . -name '*~'`
+	/bin/rm -rf {javascool-framework,javascool-proglet-builder}/doc javascool-framework/javascool.jar javascool-proglet-builder/javascool-proglet-builder.jar `find . -name '*~'`
 	echo jvs5 ; git status -s ; for f in $(git_repos) proglet-* ; do cd $$f ; s="`git status -s`" ; if [ \! -z "$$s" ] ; then echo $$f ; echo $$s ; fi ; cd .. ; done
 
 install :
