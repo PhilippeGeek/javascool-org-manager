@@ -6,12 +6,16 @@
 
 ######## nouveaux Questionnnements de vthierry à philou : ########
 
-# A mon avis javascool-framework/out est à virer ; javascool-framework/index.html qui semble etre un doc du Polyfile a deplacer . . 
+#- Ajoute d´extension jvs
 
-# Les lignes import javax.swing.*;import java.awt.*; ont été ajoutées à toutes les classes . . 
+#- Implémentation du focus sur la console qd on compile
 
-# Lors de tes copies des classes org.javascool.macros.*; tu as viré des portions et commentées d'autres : 
-## à voir ensemble avce des @todo là où il y a des pbs.
+#- Mettre en place le reformatage de code à code mirror
+
+#- ProgletApplet merde joyeusement
+
+
+######## nouveaux Questionnnements de vthierry à philou : ########
 
 # Comment encapsuler http://javascool.github.com/javascool-framework/doc/overview-summary.html 
 ## La javadoc est désormais générée avec ce que nous avons fait au niveau du ProgletBuilder
@@ -30,8 +34,6 @@
 
 # A propos du mécanisme de complétion, 
 ## à implémenter http://javascool.github.com/doc/developper/completion-json.html est ok ?
-
-# On pourrait avoir une applet signée dans la doc javascool pour le javascool-builder
 
 ######## Travail à faire pour vthierry : ########
 
@@ -92,7 +94,7 @@ proglets:
 ######################################################################################################################
 
 
-git_repos = javascool-5 javascool-framework javascool-proglet-builder javascool.github.com # web-documents
+git_repos = javascool-5 javascool-launcher javascool-framework javascool-proglet-builder javascool.github.com # web-documents
 
 pull :
 	echo "pull makefile" ; git pull -q
