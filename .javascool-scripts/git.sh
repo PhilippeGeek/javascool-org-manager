@@ -31,7 +31,7 @@ done
 
 for dep in . $DEPOTS
 do
-	if [$dep != '.' ] ; then pushd $dep > /dev/null ; fi
+	if [ $dep != '.' ] ; then pushd $dep > /dev/null ; fi
 	case "$git_command" in
 		"pull") 
 			echo "Pull de" $dep;
@@ -42,5 +42,5 @@ do
 		*)
 			echo "Rien a faire pour" $dep;
 	esac
-	if [$dep != '.' ] ; then popd > /dev/null ; fi
+	if [ $dep != '.' ] ; then popd > /dev/null ; fi
 done
