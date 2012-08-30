@@ -80,11 +80,9 @@ tst3 :
 	$(MAKE) -C javascool-framework jar
 	export PATH="/usr/java/default/bin:$$PATH" ; java -cp javascool-framework/javascool.jar org.javascool.core.ProgletApplet "un test" "kk-applet"
 
-######################################################################################################################
-# Gestion des proglets 
-######################################################################################################################
+# Gestion des proglets
 
-proglets:
+tst4 :
 	$(MAKE) -C javascool-proglet-builder jar
 	export PATH="/usr/java/default/bin:$$PATH"  ; ./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS compile
 
@@ -93,32 +91,18 @@ proglets:
 # Gestion des dépots de javascool 
 ######################################################################################################################
 
-
-git_repos = javascool-5 javascool-launcher javascool-framework javascool-proglet-builder javascool.github.com # web-documents
-
 pull :
-	echo "pull makefile" ; git pull -q
-	for f in $(git_repos) ; do echo "pull $$f" ; cd $$f ; git pull -q ; cd .. ; done
-
-ppull :
-	./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS pull
-
-GIT_COMMIT_MESSAGE ?= Mise à jour depuis le Makefile
+	.javascool-scripts/git.sh pull
 
 push :
-	echo "push makefile" ; git commit -a -m '$(GIT_COMMIT_MESSAGE)' ; git push -q 
-	for f in $(git_repos) ; do echo "push $$f" ; cd $$f ; git commit -a -m '$(GIT_COMMIT_MESSAGE)' ; git pull -q ; git push -q ; cd .. ; done
-
-ppush :
-	./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS push
+	.javascool-scripts/git.sh push -m "Mise à jour depuis le Makefile"
 
 clean :
 	/bin/rm -rf {javascool-framework,javascool-proglet-builder}/doc javascool-framework/javascool.jar javascool-proglet-builder/javascool-proglet-builder.jar `find . -name '*~'`
-	echo jvs5 ; git status -s ; for f in $(git_repos) proglet-* ; do cd $$f ; s="`git status -s`" ; if [ \! -z "$$s" ] ; then echo $$f ; echo $$s ; fi ; cd .. ; done
+	echo jvs5 ; git status -s ; for f in web-documents javascool.github.com javascool-* proglet-* ; do cd $$f ; s="`git status -s`" ; if [ \! -z "$$s" ] ; then echo $$f ; echo $$s ; fi ; cd .. ; done
 
 install :
-	echo "Commandes à ne lancer qu'une seule fois à l'install !"
-	echo 'git clone git@gist.github.com:3292843.git ; mv 3292843/{.git,makefile} . ; rmdir 3292843'
-	echo 'for f in $(depots) ; do git clone git@github.com:javascool/$$f.git ; done'
+	.javascool-scripts/install.sh
+#	i.e. : https://github.com/PhilippeGeek/javascool-org-manager/blob/master/.javascool-scripts/install.sh
 
 ######################################################################################################################

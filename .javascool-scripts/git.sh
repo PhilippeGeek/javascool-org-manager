@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEPOTS=$(ls $PWD/*/.git|grep $PWD|sed 's/'$(echo $PWD|sed 's/\//\\\//g')'\///g'|sed 's/\/.git://g')
+DEPOTS=$($PWD/*/.git|grep $PWD|sed 's/'$(echo $PWD|sed 's/\//\\\//g')'\///g'|sed 's/\/.git://g')
 
 is_quite=-q
 
@@ -29,18 +29,18 @@ do
   esac
 done
 
-for dep in $DEPOTS
+for dep in . $DEPOTS
 do
-	pushd $dep > /dev/null
+	if [$dep != '.' ] ; then pushd $dep > /dev/null ; fi
 	case "$git_command" in
 		"pull") 
 			echo "Pull de" $dep;
 			git pull $is_quite||echo "Conflit à régler dans" $dep;;
 		"push")
 			echo "Push de" $dep;
-			git commit -a -m $commit_message; git push;;
+			git commit -a -m "$commit_message"; git push $is_quite;;
 		*)
 			echo "Rien a faire pour" $dep;
 	esac
-	popd > /dev/null
+	if [$dep != '.' ] ; then popd > /dev/null ; fi
 done
