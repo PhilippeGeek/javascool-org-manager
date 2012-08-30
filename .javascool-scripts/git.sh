@@ -29,18 +29,18 @@ do
   esac
 done
 
-for dep in $DEPOTS
+for dep in . $DEPOTS
 do
-	pushd $dep > /dev/null
+	if [ $dep != '.' ] ; then pushd $dep > /dev/null ; fi
 	case "$git_command" in
 		"pull") 
 			echo "Pull de" $dep;
 			git pull $is_quite||echo "Conflit à régler dans" $dep;;
 		"push")
 			echo "Push de" $dep;
-			git commit -a -m "$commit_message" ; git pull -q ; git push -q ;;
+			git commit -a -m "$commit_message"; git push $is_quite;;
 		*)
-			echo "Rien a faire pour" $dep;
+			echo "Pas d'action pour " $dep;
 	esac
-	popd > /dev/null
+	if [ $dep != '.' ] ; then popd > /dev/null ; fi
 done

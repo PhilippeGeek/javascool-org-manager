@@ -6,12 +6,16 @@
 
 ######## nouveaux Questionnnements de vthierry à philou : ########
 
-# A mon avis javascool-framework/out est à virer ; javascool-framework/index.html qui semble etre un doc du Polyfile a deplacer . . 
+#- Ajoute d´extension jvs
 
-# Les lignes import javax.swing.*;import java.awt.*; ont été ajoutées à toutes les classes . . 
+#- Implémentation du focus sur la console qd on compile
 
-# Lors de tes copies des classes org.javascool.macros.*; tu as viré des portions et commentées d'autres : 
-## à voir ensemble avce des @todo là où il y a des pbs.
+#- Mettre en place le reformatage de code à code mirror
+
+#- ProgletApplet merde joyeusement
+
+
+######## nouveaux Questionnnements de vthierry à philou : ########
 
 # Comment encapsuler http://javascool.github.com/javascool-framework/doc/overview-summary.html 
 ## La javadoc est désormais générée avec ce que nous avons fait au niveau du ProgletBuilder
@@ -30,8 +34,6 @@
 
 # A propos du mécanisme de complétion, 
 ## à implémenter http://javascool.github.com/doc/developper/completion-json.html est ok ?
-
-# On pourrait avoir une applet signée dans la doc javascool pour le javascool-builder
 
 ######## Travail à faire pour vthierry : ########
 
@@ -78,11 +80,9 @@ tst3 :
 	$(MAKE) -C javascool-framework jar
 	export PATH="/usr/java/default/bin:$$PATH" ; java -cp javascool-framework/javascool.jar org.javascool.core.ProgletApplet "un test" "kk-applet"
 
-######################################################################################################################
-# Gestion des proglets 
-######################################################################################################################
+# Gestion des proglets
 
-proglets:
+tst4 :
 	$(MAKE) -C javascool-proglet-builder jar
 	export PATH="/usr/java/default/bin:$$PATH"  ; ./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS compile
 
@@ -91,32 +91,18 @@ proglets:
 # Gestion des dépots de javascool 
 ######################################################################################################################
 
-
-git_repos = javascool-5 javascool-framework javascool-proglet-builder javascool.github.com # web-documents
-
 pull :
-	echo "pull makefile" ; git pull -q
-	for f in $(git_repos) ; do echo "pull $$f" ; cd $$f ; git pull -q ; cd .. ; done
-
-ppull :
-	./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS pull
-
-GIT_COMMIT_MESSAGE ?= Mise à jour depuis le Makefile
+	.javascool-scripts/git.sh pull
 
 push :
-	echo "push makefile" ; git commit -a -m '$(GIT_COMMIT_MESSAGE)' ; git push -q 
-	for f in $(git_repos) ; do echo "push $$f" ; cd $$f ; git commit -a -m '$(GIT_COMMIT_MESSAGE)' ; git pull -q ; git push -q ; cd .. ; done
-
-ppush :
-	./javascool-proglet-builder/lib/proglets-update.sh $GH_USER:$GH_PASS push
+	.javascool-scripts/git.sh push -m "Mise à jour depuis le Makefile"
 
 clean :
 	/bin/rm -rf {javascool-framework,javascool-proglet-builder}/doc javascool-framework/javascool.jar javascool-proglet-builder/javascool-proglet-builder.jar `find . -name '*~'`
-	echo jvs5 ; git status -s ; for f in $(git_repos) proglet-* ; do cd $$f ; s="`git status -s`" ; if [ \! -z "$$s" ] ; then echo $$f ; echo $$s ; fi ; cd .. ; done
+	echo jvs5 ; git status -s ; for f in web-documents javascool.github.com javascool-* proglet-* ; do cd $$f ; s="`git status -s`" ; if [ \! -z "$$s" ] ; then echo $$f ; echo $$s ; fi ; cd .. ; done
 
 install :
-	echo "Commandes à ne lancer qu'une seule fois à l'install !"
-	echo 'git clone git@gist.github.com:3292843.git ; mv 3292843/{.git,makefile} . ; rmdir 3292843'
-	echo 'for f in $(depots) ; do git clone git@github.com:javascool/$$f.git ; done'
+	.javascool-scripts/install.sh
+#	i.e. : https://github.com/PhilippeGeek/javascool-org-manager/blob/master/.javascool-scripts/install.sh
 
 ######################################################################################################################
