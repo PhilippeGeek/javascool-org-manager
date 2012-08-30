@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEPOTS=$($PWD/*/.git|grep $PWD|sed 's/'$(echo $PWD|sed 's/\//\\\//g')'\///g'|sed 's/\/.git://g')
+DEPOTS=$(ls $PWD/*/.git|grep $PWD|sed 's/'$(echo $PWD|sed 's/\//\\\//g')'\///g'|sed 's/\/.git://g')
 
 is_quite=-q
 
