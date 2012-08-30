@@ -6,14 +6,6 @@
 
 ######## nouveaux Questionnnements de vthierry à philou : ########
 
-#- Ajoute d´extension jvs
-
-#- Implémentation du focus sur la console qd on compile
-
-#- Mettre en place le reformatage de code à code mirror
-
-#- ProgletApplet merde joyeusement
-
 
 ######## nouveaux Questionnnements de vthierry à philou : ########
 
