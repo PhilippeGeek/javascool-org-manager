@@ -38,7 +38,7 @@ do
 			git pull $is_quite||echo "Conflit à régler dans" $dep;;
 		"push")
 			echo "Push de" $dep;
-			git commit -a -m $commit_message; git push;;
+			git commit -a -m "$commit_message" ; git pull -q ; git push -q ;;
 		*)
 			echo "Rien a faire pour" $dep;
 	esac

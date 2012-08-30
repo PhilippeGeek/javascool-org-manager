@@ -1,2 +1,5 @@
+#Wed Aug 29 16:56:14 CEST 2012
+org.eclipse.team.ui.sychronizing_default_participant_sec_id=1346243133768
 eclipse.preferences.version=1
 org.eclipse.team.ui.first_time=false
+org.eclipse.team.ui.sychronizing_default_participant=org.eclipse.egit.ui.modelCompareParticipant
