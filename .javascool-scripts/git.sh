@@ -2,33 +2,26 @@
 
 DEPOTS=$(ls $PWD/*/.git|grep $PWD|sed 's/'$(echo $PWD|sed 's/\//\\\//g')'\///g'|sed 's/\/.git://g')
 
-is_quite=-q
-
-for arg in $@
-do
-	if [ $arg == -v ] 
-	then 
-		is_quite=-v
-	fi
-done
-
-args=`getopt vm: $*`
-if test $? != 0
-     then
-         echo 'Usage: [push|pull] [-v] [-m COMMIT_MESSAGE]'
+function usage(){
+         echo 'Usage: [-a push|pull] [-m COMMIT_MESSAGE]';
          exit 1
-fi
-commit_message="Sans message de commit"
-set -- $args
-for i
+}
+
+is_quite="";
+git_command=pull;
+git_message="Commit de $USER sans message"
+
+while getopts  "qva:m:" flag
 do
-  case "$i" in
-	"push"|"pull"|"addAll") git_command=$i;;
-        -v) shift;is_quite=-v;shift;;
-        -m) shift;commit_message=$@;shift;;
+  case $flag in
+		a) git_command=$OPTARG;;
+		m) git_message=$OPTARG;;
+		q) is_quite=" -q ";;
+		v) is_quite=" -v ";;
+		:) usage;;
+		\?) usage;;
   esac
 done
-
 for dep in . $DEPOTS
 do
 	if [ $dep != '.' ] ; then pushd $dep > /dev/null ; fi
@@ -38,9 +31,9 @@ do
 			git pull $is_quite||echo "Conflit à régler dans" $dep;;
 		"push")
 			echo "Push de" $dep;
-			git commit -a -m "$commit_message"; git push $is_quite;;
+			git commit -a -m "$git_message"; git push $is_quite;;
 		*)
-			echo "Pas d'action pour " $dep;
+			usage;
 	esac
 	if [ $dep != '.' ] ; then popd > /dev/null ; fi
 done

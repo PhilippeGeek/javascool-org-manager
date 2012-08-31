@@ -84,17 +84,31 @@ tst4 :
 ######################################################################################################################
 
 pull :
-	.javascool-scripts/git.sh pull
+	sh .javascool-scripts/git.sh -a pull
+
+GIT_M?="Mise à jour depuis le Makefile"
 
 push :
-	.javascool-scripts/git.sh push -m "Mise à jour depuis le Makefile"
+	sh .javascool-scripts/git.sh -a push -m "$(GIT_M)"
 
 clean :
-	/bin/rm -rf {javascool-framework,javascool-proglet-builder}/doc javascool-framework/javascool.jar javascool-proglet-builder/javascool-proglet-builder.jar `find . -name '*~'`
-	echo jvs5 ; git status -s ; for f in web-documents javascool.github.com javascool-* proglet-* ; do cd $$f ; s="`git status -s`" ; if [ \! -z "$$s" ] ; then echo $$f ; echo $$s ; fi ; cd .. ; done
+	@/bin/rm -rf {javascool-framework,javascool-proglet-builder}/doc javascool-framework/javascool.jar javascool-proglet-builder/javascool-proglet-builder.jar `find . -name '*~'` javascool-launcher/javascool-launcher.jar
+	@$(MAKE) -C javascool-5 clean > /dev/null;
+	@javascool-proglet-builder/lib/proglets-update.sh clean > /dev/null;
+	@echo jvs5 ; git status -s ; for f in web-documents javascool.github.com javascool-* proglet-* ; do cd $$f ; s="`git status -s`" ; if [ \! -z "$$s" ] ; then echo $$f ; echo $$s ; fi ; cd .. ; done
 
 install :
 	.javascool-scripts/install.sh
 #	i.e. : https://github.com/PhilippeGeek/javascool-org-manager/blob/master/.javascool-scripts/install.sh
+
+compile :
+	@$(MAKE) -C javascool-framework jar
+	@$(MAKE) -C javascool-proglet-builder jar
+	@javascool-proglet-builder/lib/proglets-update.sh all;
+	@$(MAKE) -C javascool-5 lib/javascool/javascool.jar;
+	@$(MAKE) -C javascool-launcher jar;
+
+publish : compile
+	sh .javascool-scripts/publish.sh;
 
 ######################################################################################################################
