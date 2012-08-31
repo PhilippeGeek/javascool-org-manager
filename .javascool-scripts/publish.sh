@@ -43,6 +43,7 @@ cd ..;
 cd javascool-launcher;
 make clean;
 make jar;
+cp javascool-launcher.jar ../javascool.github.com;
 cd ..;
 cd javascool.github.com/repo/;
 mkdir build;
