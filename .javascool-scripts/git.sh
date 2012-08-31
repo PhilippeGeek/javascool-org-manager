@@ -24,6 +24,7 @@ do
 		\?) usage;;
   esac
 done
+
 for dep in . $DEPOTS
 do
 	if [ $dep != '.' ] ; then pushd $dep > /dev/null ; fi
