@@ -6,9 +6,6 @@
 
 ######## nouveaux Questionnnements de vthierry à philou : ########
 
-
-######## nouveaux Questionnnements de vthierry à philou : ########
-
 # Comment encapsuler http://javascool.github.com/javascool-framework/doc/overview-summary.html 
 ## La javadoc est désormais générée avec ce que nous avons fait au niveau du ProgletBuilder
 ### Mais le style, du coup, est à revoir ensemble . . 
@@ -45,7 +42,7 @@ endif
 
 # test de Java'sCool 5
 
-run :
+run : compile
 	cd javascool-5 ; make fweb
 
 # test du ProgletBuilder
@@ -104,11 +101,13 @@ install :
 compile :
 	@$(MAKE) -C javascool-framework jar
 	@$(MAKE) -C javascool-proglet-builder jar
-	@javascool-proglet-builder/lib/proglets-update.sh all;
-	@$(MAKE) -C javascool-5 lib/javascool/javascool.jar;
-	@$(MAKE) -C javascool-launcher jar;
+	@javascool-proglet-builder/lib/proglets-update.sh all
+	@$(MAKE) -C javascool-5 lib/javascool/javascool.jar
+	@$(MAKE) -C javascool-launcher jar
+	@$(MAKE) -C javascool.github.com sync
 
 publish : compile
-	sh .javascool-scripts/publish.sh;
+	sh .javascool-scripts/publish.sh
 
 ######################################################################################################################
+
