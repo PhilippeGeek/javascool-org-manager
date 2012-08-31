@@ -4,6 +4,8 @@ DEPOTS=$(ls $PWD/*/.git|grep $PWD|sed 's/'$(echo $PWD|sed 's/\//\\\//g')'\///g'|
 
 function usage(){
          echo 'Usage: [-a push|pull] [-m COMMIT_MESSAGE]';
+         echo '    -a : Action à transmettre à GIT';
+         echo '    -m : Le message pour le commit';
          exit 1
 }
 
